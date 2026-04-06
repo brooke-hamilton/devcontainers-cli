@@ -1,8 +1,10 @@
 # Product Spec: Lockfile Graduation
 
-**Status:** Draft  
-**Scope:** Dev Container CLI  
-**Spec change required:** No — the [lockfile spec](https://github.com/devcontainers/spec/blob/main/docs/specs/devcontainer-lockfile.md) already exists and is not marked as experimental.
+## Summary
+
+The net change in this spec is to make lockfile generation the default behavior for `build` and `up`, similar to how `npm install` automatically generates a `package-lock.json`. Today, lockfile creation requires passing `--experimental-lockfile` or using a `touch` workaround. After this change, `devcontainer-lock.json` is created automatically on the first build and kept up to date as `devcontainer.json` changes.
+
+This proposal defines a behavior change, which some could consider to be a breaking change: builds that previously produced no lockfile will now produce an additional `devcontainer-lock.json` file. In practice, this is low-impact — no existing builds will fail, no container output changes, and the only visible effect is a new file in the workspace. Users who don't want it can opt out with `--no-lockfile`. The experimental flags are preserved as hidden, deprecated aliases so existing CI pipelines continue to work. The commands `devcontainer outdated` and `devcontainer upgrade` (which already read/write lockfiles) will be unaffected by this change.
 
 ## Background
 
