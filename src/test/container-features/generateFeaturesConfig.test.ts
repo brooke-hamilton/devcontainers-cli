@@ -91,10 +91,11 @@ RUN chmod -R 0755 /tmp/dev-container-features/hello_1 \\
         this.timeout('40s');
         const version = 'unittest';
         const tmpFolder: string = path.join(await getLocalCacheFolder(), 'container-features', `${version}-${Date.now()}`);
-        await mkdirpLocal(tmpFolder);
+        const devcontainerFolder = path.resolve(tmpFolder, '.devcontainer');
+        await mkdirpLocal(devcontainerFolder);
 
         const config: DevContainerConfig = {
-            configFilePath: URI.from({ 'path': './.devcontainer/devcontainer.json', scheme: 'file' }),
+            configFilePath: URI.from({ 'path': path.resolve(devcontainerFolder, 'devcontainer.json'), scheme: 'file' }),
             dockerFile: '.',
             features: {
                 node: {
